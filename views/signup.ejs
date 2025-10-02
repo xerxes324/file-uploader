@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/signup.css">
+</head>
+<body>
+    <div class="header">
+        <h1> FILE UPLOADER </h1>
+    </div>
+    <div class="signupformDiv">
+        <h1> Sign up </h1>
+        <form method="post" action="/signup">
+            <h3> Username </h3>
+            <input name="username" type="text" placeholder="John Doe" >
+            <h3> Email </h3>
+            <input name="email" type="email" placeholder="johndoe@gmail.com" >
+            <h3> Password </h3>
+            <input name="signuppassword" type="password">
+            <h3> Confirm Password </h3>
+            <input name="confirmpassword" type="password">
+            <button type="submit" > Submit </button>
+        </form>
+        <div class="errorDiv" >
+            <%if ( Array.isArray(errors) && errors.length > 0){%>
+                <img src="/assets/exclamation.svg"/>
+                <p> <%= errors[0].msg %> </p>
+            <%}%>
+
+            <%if ( errors && typeof(errors) === 'string'){%>
+                <img src="/assets/exclamation.svg"/>
+                <p> <%= errors %> </p>
+            <%}%>
+        </div>
+
+
+    </div>
+    <p> Have an account ? <a href="/"> Login</a></p>
+</body>
+</html>
