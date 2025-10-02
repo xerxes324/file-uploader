@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+    <div class="header">
+        <h1> FILE UPLOADER </h1>
+    </div>
+    <div class="loginformDiv" >
+        <h1> Login </h1>
+        <form class="loginform" method="post" action="/" >
+            <h3> Email </h3>
+            <input type="email" name="username" placeholder="johndoe@gmail.com">
+            <h3> Password</h3>
+            <input name="password" type="password">
+            <button type="submit">Submit</button>
+        </form>
+        <div class="errorDiv">
+            <%if (errors && typeof(errors)==='string'){%>
+                <img src="/assets/exclamation.svg"/>
+                <p> <%= errors %></p>
+            <%}%>
+        </div>
+
+        
+    </div>
+    
+    <p> Don't have an account ? <a href="/signup">Sign up</a></p>
+    
+</body>
+</html>
