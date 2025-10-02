@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+
+        .sidebar{
+            height: 100vh;
+            background-color: rgb(60, 53, 53);
+            display: flex;
+            flex-direction: column;
+            width: 20%;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .sidebar>:first-child{
+            margin-top: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar>:nth-child(2){
+            margin-bottom: auto;
+        }
+
+        .sidebar>:nth-child(3){
+            margin-top: 2rem;
+            padding: 4rem;
+            flex-grow: 1;
+        }
+
+        .hidden{
+            display: none;
+        }
+
+        .visible{
+            display: block;
+        }
+
+        .folderform,
+        .fileform {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgb(80, 63, 175);
+            padding: 3rem;
+            border: 1px solid #000;
+        }
+        img{
+            height: 30px;
+            width: 30px;
+            filter: invert(80%) sepia(40%);
+        }
+
+        .newFolderButton, .newFileButton{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+
+        button{
+            font-size: 20px !important;
+            all: unset;
+        }
+        button:hover{
+            color: rgb(31, 214, 31);
+            cursor: pointer;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+    <div class="sidebar">
+
+        <div class="newFolderButton" >
+             <img src="/assets/folder.svg">
+            <button id="folderBtn"> new folder </button>
+        </div>
+        
+        <div class="newFileButton">
+            <img src="/assets/file.svg" >
+            <button id="fileBtn"> new file </button>
+        </div>
+        <h1> Your folders: </h1>
+    </div>
+    <div>
+        <form id="folderForm" class="folderform hidden">
+            <label>Folder name:</label>
+            <input type="text" name="foldername">
+            <button type="submit">Create</button>
+        </form>
+    </div>
+    <div>
+        <form method="post" action="/newfile" id="fileForm" class="fileform hidden" enctype="multipart/form-data">
+            <label>File name:</label>
+            <input type="file" name="avatar">
+            <button type="submit">Create</button>
+        </form>
+    </div>
+
+    
+
+    <script>
+        var folderBtn = document.getElementById("folderBtn");
+        var fileBtn = document.getElementById("fileBtn");
+        var folderForm = document.getElementById("folderForm");
+        var fileForm = document.getElementById("fileForm");
+
+        folderBtn.onclick = function() {
+            fileForm.classList.add("hidden");
+            fileForm.classList.remove("visible");
+            folderForm.classList.toggle("hidden");
+            folderForm.classList.toggle("visible");
+        }
+
+        fileBtn.onclick = function() {
+            folderForm.classList.add("hidden");
+            folderForm.classList.remove("visible");
+            fileForm.classList.toggle("hidden");
+            fileForm.classList.toggle("visible");
+        }
+    </script>
+</body>
+</html>
