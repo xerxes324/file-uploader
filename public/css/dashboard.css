@@ -1,0 +1,44 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,body{
+    background-color: black;
+    color: greenyellow;
+}
+
+.header{
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: rgb(26, 25, 25);
+    height: 4rem;
+}
+
+.header>:first-child{
+    margin-right: auto;
+    margin-left: 25px;    
+}
+
+.header>:last-child{
+    margin-right: 20px;
+}
+
+a{  
+    text-decoration: none;
+    all: unset;
+    font-size: 25px !important;
+}
+
+a:hover{
+    cursor: pointer;
+    transform: scale(1.05);
+    transition: 0.3s;
+}
+
+.mainSection{
+    display: flex;
+}
