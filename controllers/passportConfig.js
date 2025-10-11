@@ -7,7 +7,7 @@ const bcrypt = require('bcryptjs');
 exports.autoLogin = async(req,res,next) => {
     const emailID = req.body.email;
 
-    const user = await prisma.user.findUnique({
+    const user = await prisma.users.findUnique({
         where:{
             email:emailID
         }
@@ -40,12 +40,12 @@ passport.serializeUser((user,done) => {
 
 passport.deserializeUser(async(id, done)=>{
     try{
-        const user = await prisma.user.findUnique({
+        const user = await prisma.users.findUnique({
             where:{
                 id: id
             }
         })
-        console.log(user, "is query oppp");
+        // console.log(user, "is query oppp");
         done(null,user);
     }
     catch(err){
@@ -56,7 +56,7 @@ passport.deserializeUser(async(id, done)=>{
 passport.use(
     new LocalStrategy(async(username,password,done) => {
         try{
-            const user = await prisma.user.findUnique({
+            const user = await prisma.users.findUnique({
                 where:{
                     email: username
                 }
@@ -77,3 +77,5 @@ passport.use(
         }
     })
 )
+
+//onclick="window.location.href = '/foldercontents/?id=<%=value.id%>' "
