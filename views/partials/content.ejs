@@ -15,21 +15,64 @@
     table{
         border-collapse: collapse;
         width: 100%;
+        text-align: center;
     }
+    .folderDiv{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    img{
+        height: 25px;width: 25px;
+    }
+
+    tr {
+        transition: background-color 0.5s ease-in-out;
+        border-radius: 10px;
+    }
+
+    tr:hover{
+        background-color: rgb(85, 84, 84);
+    }
+    .hidden{
+        display: none;
+    }
+
 </style>
 
 <body>
+    <h1> </h1>
     <div class="tableDiv" >
-        <table border="1" cellpadding="0" cellspacing="0">
+        <table cellpadding="0" cellspacing="0">
             <thead>
-            <tr>
-                <th>Name</th>
-                <th>Size</th>
-                <th>Created</th>
-            </tr>
+                <tr style="height: 3rem;" >
+                    <th>Name</th>
+                    <th>Size</th>
+                    <th>Created</th>
+                </tr>
             </thead>
+            
+             <% if (folders && Array.isArray(folders) && folders.length > 0) { %>
+             <% folders.forEach((value) => { %>
+                <tr>
+                    <td style="height: 3rem;" >
+                        <div class="folderDiv" >
+                            <img  src="/assets/foldernew.svg">
+                            <button onclick="window.location.href = '/foldercontents/?id=<%=value.id%>' " > <%= value.folder_name%> </button>
+                        </div>
+                    </td>
+                    <td> -- </td>
+                    <td> <%= value.created_at.toLocaleString() %> </td>
+                </tr>
+             <% }) %>
+             <% } %>
         </table>
     </div>
 
+
+    <script>
+
+    </script>
 </body>
 </html>

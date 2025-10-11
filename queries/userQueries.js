@@ -17,7 +17,7 @@ const bcrypt = require('bcryptjs');
 // })
 
 exports.emailExists = async(req,res,next) =>{
-    const exists = await prisma.user.findUnique({
+    const exists = await prisma.users.findUnique({
         where:{
             email:req.body.email
         }
@@ -33,7 +33,7 @@ exports.emailExists = async(req,res,next) =>{
 exports.createUser = async(req,res,next) =>{
     const password = await bcrypt.hash(req.body.signuppassword,10);
     console.log(password,'is the pwd');
-    await prisma.user.create({
+    await prisma.users.create({
         data:{
             name:req.body.username,
             email: req.body.email,
@@ -42,7 +42,13 @@ exports.createUser = async(req,res,next) =>{
     })
 
     //remove this after code completion
-    const users = await prisma.user.findMany();
+    const users = await prisma.users.findMany();
     console.log(users,'is prisma op');
     next(); 
 }
+
+        // <% if (folders && folders.length > 0) { %>
+        // <% folders.forEach((value) => { %>
+        //     <h2><%= value.folder_name %></h2>
+        // <% }) %>
+        // <% } %>

@@ -26,11 +26,11 @@
             margin-bottom: auto;
         }
 
-        .sidebar>:nth-child(3){
+        /* .sidebar>:nth-child(3){
             margin-top: 2rem;
             padding: 4rem;
             flex-grow: 1;
-        }
+        } */
 
         .hidden{
             display: none;
@@ -89,12 +89,18 @@
             <img src="/assets/file.svg" >
             <button id="fileBtn"> new file </button>
         </div>
-        <h1> Your folders: </h1>
+
+        <!-- <h1> Your folders: </h1> -->
+
+
+
     </div>
     <div>
-        <form id="folderForm" class="folderform hidden">
+        <form method="post" action="/newfolder" id="folderForm" class="folderform hidden">
             <label>Folder name:</label>
             <input type="text" name="foldername">
+            <input name="location" class="hidden" id="getlocation">
+            <!-- <input name="queryID" class="hidden" id="getqueryID" > -->
             <button type="submit">Create</button>
         </form>
     </div>
@@ -106,6 +112,7 @@
         </form>
     </div>
 
+<!--  QUERY ID debug.  -->
     
 
     <script>
@@ -127,6 +134,8 @@
             fileForm.classList.toggle("hidden");
             fileForm.classList.toggle("visible");
         }
+
+        document.getElementById("getlocation").value = window.location.pathname;
     </script>
 </body>
 </html>
