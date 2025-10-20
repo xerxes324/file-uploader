@@ -47,7 +47,10 @@ userRouter.post("/",
 userRouter.use(EH.loginHandler);
 
 
-userRouter.post("/newfile",upload.single('avatar') ,file.validateFile, file.addFile)
+userRouter.post("/newfile",upload.single('avatar') ,
+    file.validateFile, 
+    file.addFile,
+    controller.routeLocation)
 //handler here -> for file size error catch
 
 // userRouter.post("/newfolder/:")
