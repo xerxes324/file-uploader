@@ -25,7 +25,7 @@ exports.addFolder = async(req,res,next)=>{
     else{
 
         // set folders parentID to query value
-        const folderID = req.query.id;
+        // const folderID = req.query.id;
         // console.log(req.url, 'is the subfolder URL');
         console.log(req.session.parentFolderID, 'is the parent ID');
         console.log(req.body, 'is the body');
@@ -34,11 +34,12 @@ exports.addFolder = async(req,res,next)=>{
             data:{
                 folder_name : req.body.foldername,
                 // parent_id: req.session.parentFolderID,
-                parent:{connect:{parent_id: req.session.parentFolderID}},
+                parent:{connect:{id: req.session.parentFolderID}},
                 user:{connect:{id: req.user.id}}  
             }
         })
 
+        console.log("PRISMA DONE");
     }
 
     next();
@@ -51,27 +52,12 @@ exports.addSubfolder = async(req,res,next) => {
     next();
 }
 
-
+// runs when u click on a folder. 
 exports.displayFolderContents = async(req,res,next)=>{
     console.log(req.query.id, 'is the query id');
     const folderID = parseInt(req.query.id);
     req.session.parentFolderID = parseInt(req.query.id);
     console.log(req.session.parentFolderID,'is the one');
-    const files = await prisma.files.findMany({
-        where:{
-            folder_id : folderID,
-        }
-    })
-
-    const subfolders = await prisma.folders.findMany({
-        where:{
-            parent_id: folderID
-        }
-    })  
-
-    // query subfolders here where parent_id = folder_id. ( will be set in above function )
-
-    console.log("files are:", files, "and subfolders:", subfolders);
     next();
 }
 
@@ -81,7 +67,7 @@ exports.displayFolderContents = async(req,res,next)=>{
 
 exports.getFoldersByID = async(id) =>{
     const folders = await prisma.folders.findMany({
-        where : {user_id : id}
+        where : {user_id : id, parent_id: null}
     });
     // console.log(folders,'is folder op');
     return folders;
