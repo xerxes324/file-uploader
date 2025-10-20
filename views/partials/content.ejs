@@ -7,19 +7,28 @@
 </head>
 
 <style>
-    
+
+    h1{
+        /* background-color: red; */
+        /* background-color: red; */
+        
+    }
     .tableDiv{
+        /* background-color: white; */
         padding: 30px;
         width: 100%;
     }
     table{
+        margin-top: 5rem;
         border-collapse: collapse;
         width: 100%;
         text-align: center;
     }
     .folderDiv{
         display: flex;
-        justify-content: center;
+        margin-left: 5rem;
+        /* justify-content: center; */
+        gap: 20px;
         align-items: center;
     }
 
@@ -42,8 +51,9 @@
 </style>
 
 <body>
-    <h1> </h1>
+
     <div class="tableDiv" >
+        <h1> <a href="/dashboard" > Home </a></h1>
         <table cellpadding="0" cellspacing="0">
             <thead>
                 <tr style="height: 3rem;" >
@@ -67,6 +77,21 @@
                 </tr>
              <% }) %>
              <% } %>
+             
+             <% if(files && Array.isArray(files) && files.length > 0){%>
+                <%files.forEach((value) => {%>
+                    <tr>
+                        <td style="height: 3rem;">
+                            <div class="folderDiv" >
+                                <img src="/assets/file.svg">
+                                <button> <%= value.originalname %> </button>
+                            </div>                            
+                        </td>
+                        <td> <%= (value.size / (1024 * 1024)).toFixed(2) %> MB </td>
+
+                    </tr>
+                <%})%>
+             <%}%>
         </table>
     </div>
 

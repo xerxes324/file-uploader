@@ -6,9 +6,8 @@
     <title>Document</title>
 
     <style>
-
         .sidebar{
-            height: 100vh;
+            min-height: 100vh;
             background-color: rgb(60, 53, 53);
             display: flex;
             flex-direction: column;
@@ -107,6 +106,7 @@
     <div>
         <form method="post" action="/newfile" id="fileForm" class="fileform hidden" enctype="multipart/form-data">
             <label>File name:</label>
+            <input name="location" class="hidden" id="filelocation">
             <input type="file" name="avatar">
             <button type="submit">Create</button>
         </form>
@@ -134,8 +134,27 @@
             fileForm.classList.toggle("hidden");
             fileForm.classList.toggle("visible");
         }
-
+        document.getElementById("filelocation").value = window.location.pathname;
         document.getElementById("getlocation").value = window.location.pathname;
+
+        document.addEventListener("click",(e)=>{
+            if ( !fileForm.contains(e.target) && e.target !== fileBtn ){
+                console.log("closing form..");
+                fileForm.classList.toggle("visible");
+                fileForm.classList.toggle("hidden");
+                folderForm.classList.remove('visible');
+                folderForm.classList.add("hidden");
+            }
+        })
+
+        document.addEventListener("click", (e) => {
+            if ( !folderForm.contains(e.target) && e.target !== folderBtn ){
+                folderForm.toggle("visible");
+                folderForm.toggle("hidden");
+                fileForm.classList.remove('visible');
+                fileForm.classList.add("hidden");
+            }
+        })
     </script>
 </body>
 </html>
