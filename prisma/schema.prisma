@@ -38,12 +38,6 @@ model Files{
   size Int 
   created_at DateTime @default(now())
   folders Folders? @relation(fields: [folder_id], references: [id])
-  folder_id Int? // nullable if the file is not part of any folder. else set to folder_id.
-  
-
-  // parent_id Int? @unique
-  // parent Files? @relation("FileHierarchy", fields: [parent_id] )
+  folder_id Int?
 }
 
-//parent_id cant be @uniqeu because if it does then a folder can contain 
-//only 1 subfolder. 
