@@ -1,0 +1,40 @@
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: "Inter", sans-serif;
+  background-color: #0f0f0f;
+  color: #f1f1f1;
+}
+
+h1 {
+  font-size: 3rem;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+  color: #ff4d4d;
+}
+
+p {
+  color: #b5b5b5;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+button {
+  padding: 0.8rem 1.6rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #ff4d4d, #ff7b00);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(255, 77, 77, 0.4);
+}

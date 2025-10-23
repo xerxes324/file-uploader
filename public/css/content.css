@@ -1,0 +1,155 @@
+.tableDiv {
+  padding: 30px;
+  width: 100%;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  text-align: center;
+}
+
+.folderDiv {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+img {
+  height: 30px;
+  width: 30px;
+}
+
+tr {
+  transition: background-color 0.5s ease-in-out;
+  border-radius: 10px;
+  text-align: end;
+}
+
+tr:hover {
+  background-color: rgb(26,25,25);
+}
+
+.previewDiv {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(17, 16, 16);
+  color: rgb(255, 254, 254);
+  padding: 2.5rem 3rem;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.6);
+  display: none;
+  z-index: 1000;
+  text-align: center;
+  min-width: 350px;
+}
+
+#previewContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(28, 28, 28);
+  padding: 1.2rem 1.5rem;
+  border-radius: 10px;
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.05);
+  margin-bottom: 1.8rem;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+#previewContent strong {
+  font-size: 1.1rem;
+  color: #ff4c4c;
+}
+
+#downloadbtn {
+  border: 2px solid red;
+  padding: 12px 25px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  background: transparent;
+  color: white;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  width: 80%;
+}
+
+#downloadbtn:hover {
+  background-color: rgb(85,85,84);
+  color: greenyellow;
+}
+
+h3 {
+  margin-bottom: 1rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+#sharefile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+}
+
+#sharefile .button-row {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+}
+
+#sharefile button {
+  background-color: transparent;
+  border: 1px solid #ccc;
+  color: greenyellow;
+  padding: 8px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#sharefile button:hover {
+  background-color: rgb(85, 84, 84);
+  transform: scale(1.05);
+}
+
+#urlholder {
+  pointer-events: none;
+  opacity: 0;
+  padding: 10px 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  display: inline-block;
+  background-color: rgb(50, 50, 50);
+  margin-top: 2rem;
+  width: 80%;
+}
+
+#urlholder:hover {
+  background-color: rgb(85, 84, 84);
+  color: greenyellow;
+  cursor: pointer;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  display: none;
+  z-index: 999;
+}
+
+.urlholderdiv {
+  width: 100%;
+}

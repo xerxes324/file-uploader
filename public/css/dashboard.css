@@ -7,15 +7,16 @@
 html,body{
     background-color: black;
     color: greenyellow;
+    font-size: larger;
 }
 
 .header{
     position: relative;
     display: flex;
-    justify-content: space-around;
     align-items: center;
     background-color: rgb(26, 25, 25);
     height: 4rem;
+    border-bottom: 2px solid rgb(88, 86, 86);
 }
 
 .header>:first-child{
@@ -42,3 +43,10 @@ a:hover{
 .mainSection{
     display: flex;
 }
+
+#home, #logout{
+    margin-top: 10px;
+    height: 40px;
+    width: 40px;
+}
+
