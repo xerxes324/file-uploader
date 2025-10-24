@@ -13,6 +13,8 @@ const folder = require("../controllers/folderManager");
 const multer = require('multer');
 const upload = multer({dest :'uploads/'});
 
+
+//Get requests
 userRouter.get("/", verify.guest, controller.login);
 userRouter.get("/signup",verify.guest, controller.signup);
 userRouter.get("/dashboard", verify.entry, controller.dashboard);
@@ -22,8 +24,13 @@ userRouter.get("/foldercontents",
         folder.displayFolderContents,
         controller.dashboard
     );
-//POSTS
 
+userRouter.get("/download",
+    file.downloadFile
+)
+
+
+//Post requests
 userRouter.post("/signup",
     val.validateUsername,
     val.validateEmail,
@@ -48,19 +55,20 @@ userRouter.use(EH.loginHandler);
 
 
 userRouter.post("/newfile",upload.single('avatar') ,
-    file.validateFile, 
+    file.supabaseUpload, 
     file.addFile,
     controller.routeLocation)
-//handler here -> for file size error catch
 
-// userRouter.post("/newfolder/:")
 userRouter.post("/newfolder", folder.addFolder,controller.routeLocation )
 
+userRouter.post("/generateurl", 
+    file.generateURL
+)
 
-// fallback
-
+// catch all 
 userRouter.get("/*splat", (req,res)=>{
-    // render the fallback page -> option to redirect to login ( / ) l
-    console.log("error!");
+    res.render("404");
 })
+
+
 module.exports = {userRouter};
