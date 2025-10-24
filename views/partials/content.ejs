@@ -4,100 +4,133 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Simple Table</title>
+  <link rel="stylesheet" href="/css/content.css">
 </head>
 
-<style>
-
-    h1{
-        /* background-color: red; */
-        /* background-color: red; */
-        
-    }
-    .tableDiv{
-        /* background-color: white; */
-        padding: 30px;
-        width: 100%;
-    }
-    table{
-        margin-top: 5rem;
-        border-collapse: collapse;
-        width: 100%;
-        text-align: center;
-    }
-    .folderDiv{
-        display: flex;
-        margin-left: 5rem;
-        /* justify-content: center; */
-        gap: 20px;
-        align-items: center;
-    }
-
-    img{
-        height: 25px;width: 25px;
-    }
-
-    tr {
-        transition: background-color 0.5s ease-in-out;
-        border-radius: 10px;
-    }
-
-    tr:hover{
-        background-color: rgb(85, 84, 84);
-    }
-    .hidden{
-        display: none;
-    }
-
-</style>
-
 <body>
+  <div class="tableDiv">
 
-    <div class="tableDiv" >
-        <h1> <a href="/dashboard" > Home </a></h1>
-        <table cellpadding="0" cellspacing="0">
-            <thead>
-                <tr style="height: 3rem;" >
-                    <th>Name</th>
-                    <th>Size</th>
-                    <th>Created</th>
-                </tr>
-            </thead>
-            
-             <% if (folders && Array.isArray(folders) && folders.length > 0) { %>
-             <% folders.forEach((value) => { %>
-                <tr>
-                    <td style="height: 3rem;" >
-                        <div class="folderDiv" >
-                            <img  src="/assets/foldernew.svg">
-                            <button onclick="window.location.href = '/foldercontents/?id=<%=value.id%>' " > <%= value.folder_name%> </button>
-                        </div>
-                    </td>
-                    <td> -- </td>
-                    <td> <%= value.created_at.toLocaleString() %> </td>
-                </tr>
-             <% }) %>
-             <% } %>
-             
-             <% if(files && Array.isArray(files) && files.length > 0){%>
-                <%files.forEach((value) => {%>
-                    <tr>
-                        <td style="height: 3rem;">
-                            <div class="folderDiv" >
-                                <img src="/assets/file.svg">
-                                <button> <%= value.originalname %> </button>
-                            </div>                            
-                        </td>
-                        <td> <%= (value.size / (1024 * 1024)).toFixed(2) %> MB </td>
+    <table cellpadding="0" cellspacing="0">
+      <thead>
+        <tr style=" border: 1px solid white; color: rgb(255, 255, 255); height: 6rem;;">
+          <th style=" padding: 2rem; text-align: left;" >Name</th>
+          <th>Size</th>
+          <th style="padding: 2rem;" >Created</th>
+        </tr>
+      </thead>
 
-                    </tr>
-                <%})%>
-             <%}%>
-        </table>
+      <% if (folders && Array.isArray(folders) && folders.length > 0) { %>
+      <% folders.forEach((value) => { %>
+      <tr>
+        <td style="height: 3rem;">
+          <div class="folderDiv">
+            <img src="/assets/foldernew.svg">
+            <button onclick="window.location.href = '/foldercontents/?id=<%=value.id%>'"> <%= value.folder_name%> </button>
+          </div>
+        </td>
+        <td>--</td>
+        <td style="padding-right: 1rem;" ><%= value.created_at.toLocaleString() %></td>
+      </tr>
+      <% }) %>
+      <% } %>
+
+      <% if (files && Array.isArray(files) && files.length > 0) { %>
+      <% files.forEach((value) => { %>
+      <tr>
+        <td style="height: 3rem;">
+          <div class="folderDiv">
+            <img src="/assets/file.svg">
+            <button onclick="triggerPreview('<%= value.originalname %>',
+            '<%= (value.size / (1024 * 1024)).toFixed(2) %> MB',
+            '<%= value.path %>','<%= value.filename %> ')">
+              <%= value.originalname %>
+            </button>
+          </div>
+        </td>
+        <td><%= (value.size / (1024 * 1024)).toFixed(5) %> MB</td>
+        <td style="padding-right: 1rem;" ><%= value.created_at.toLocaleString() %></td>
+      </tr>
+      <% }) %>
+      <% } %>
+    </table>
+  </div>
+
+  <div class="overlay" id="overlay" onclick="closePreview()"></div>
+  <div class="previewDiv" id="previewDiv">
+    <div id="previewContent"></div>
+    <button id="downloadbtn">Download File</button>
+    <h3>Click to generate share link</h3>
+    <div id="sharefile">
+      <div class="button-row">
+        <button id="threedaysbtn">3 days</button>
+        <button id="tendaysbtn">10 days</button>
+        <button id="onemonthbtn">1 month</button>
+      </div>
+      <div class="urlholderdiv" style="text-align:center;">
+        <button id="urlholder">Click to copy link</button>
+      </div>
     </div>
+  </div>
 
+  <script>
+    const previewDiv = document.getElementById("previewDiv");
+    const overlay = document.getElementById("overlay");
+    const previewContent = document.getElementById("previewContent");
+    const downloadbtn = document.getElementById('downloadbtn');
+    const urlholder = document.getElementById("urlholder");
+    const threedays = document.getElementById('threedaysbtn');
+    const tendays = document.getElementById("tendaysbtn");
+    const onemonth = document.getElementById("onemonthbtn");
 
-    <script>
+    let currentFileName = "";
 
-    </script>
+    const triggerPreview = (name, size, path, filename_unique) => {
+        currentFileName = name;
+
+        previewContent.innerHTML = `
+          <strong>${name}</strong>
+          <span style="margin-top: 6px; color: #bbb;">${size}</span>
+        `;
+        previewDiv.style.display = "block";
+        overlay.style.display = "block";
+
+        downloadbtn.onclick = () => {
+          window.location.href = `/download/?file=${path}&originalname=${name}&filename=${filename_unique}`;
+        };
+
+        const generateLink = async (days) => {
+          await fetch("/generateurl", 
+          {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ days, file: currentFileName, filename : filename_unique })
+          })
+          .then(response => response.text())
+          .then(link => {
+            urlholder.href = link;
+            urlholder.target = "_blank";
+            urlholder.style.pointerEvents = "auto";
+            urlholder.style.opacity = 1;
+          })
+          .catch(error => console.error("Error generating link:", error));
+        };
+
+        threedays.onclick = () => generateLink('3');
+        tendays.onclick = () => generateLink('10');
+        onemonth.onclick = () => generateLink('30');
+
+        urlholder.onclick = () => {
+          const text = urlholder.href;
+          navigator.clipboard.writeText(text)
+            .then(() => alert("Link copied to clipboard!"))
+            .catch(err => console.error("Failed to copy:", err));
+        };
+    };
+
+    const closePreview = () => {
+      previewDiv.style.display = "none";
+      overlay.style.display = "none";
+    };
+</script>
 </body>
 </html>
