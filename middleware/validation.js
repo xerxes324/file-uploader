@@ -39,7 +39,6 @@ exports.confirmPassword = [
 exports.passwordMatch = [
     body("signuppassword")
     .custom((value, {req}) => {
-        console.log("matching..");
         if ( value !== req.body.confirmpassword){
             throw new Error("Passwords dont't match")
         }
@@ -50,7 +49,6 @@ exports.passwordMatch = [
 exports.validateResult = (req,res,next) => {
     const errors = validationResult(req);
     if ( !errors.isEmpty()){
-        console.log(errors, "is the errors array.");
         next(errors.array());
     }
     else{
