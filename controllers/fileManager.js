@@ -3,35 +3,26 @@ const prisma = new PrismaClient();
 const fs = require('fs');
 const {supabase} = require("../supabaseClient");
 
-exports.validateFile = async(req,res,next) => {
+exports.supabaseUpload = async(req,res,next) => {
 
-    console.log(req.session.parentFolderID, 'is parent folder loc');
-
-    //storing the query ID in session 
-
-    console.log('the file is', req.file);
     const filesize = req.file.size / ( 1024 * 1024);
-    console.log("filesize in MB is:", filesize);
 
-    if ( filesize > 10){ // 10mB limit
+    if ( filesize > 10){ 
         console.log('select file <10MB')
-        //add smth for error popup handling
         res.redirect("/dashboard");
     }
     else{
         const file = req.file;
         const buffer = fs.readFileSync(file.path)
-
+        console.log(req.user.id,"is the user ID");
         const {data,error} = await supabase.storage.from('file-bucket').upload(
-            `users/${req.session.userID}/${file.originalname}`, 
+            `users/${req.user.id}/${file.originalname}/${file.filename}`, 
             buffer
         )
         if ( error ){
-            console.log(error,"is the errorn bro.");
-            console.error("Failed to upload to supabase");
+            console.error(error,"Failed to upload to supabase.");
         }
         else{
-            console.log('success!');
             next();
         }
     }
@@ -60,8 +51,6 @@ exports.addFile = async(req,res,next) =>{
     }
 
     else{
-        console.log(req.session.parentFolderID, 'is the PARENT');
-        
         await prisma.files.create({
             data:{
                 originalname: req.file.originalname,
@@ -91,8 +80,39 @@ exports.getFilesByID = async(id) => {
 }
 
 
+exports.downloadFile = async(req,res,next) => {
+
+    const path = `users/${req.user.id}/${req.query.originalname}/${req.query.filename}`;
+    const {data,error} = await supabase.storage.from('file-bucket').download(path)
+    if (error){
+        res.redirect("/dashboard");
+    }
+    else{
+        const buffer = Buffer.from(await data.arrayBuffer());
+        res.setHeader('Content-Disposition', `attachment; filename="${req.query.name}"`)
+        res.send(buffer);
+    }
+}
 
 
+exports.generateURL = async (req, res, next) => {
+    const days = req.body.days;
+    const originalname = req.body.file;
+    const userId = req.user.id;
+    const filename_unique = req.body.filename;
 
-// constrain the size of file to less than something. else error popup
-//
+    let seconds;
+    if (days === '3') seconds = 3600 * 24 * 3;
+    else if (days === '10') seconds = 3600 * 24 * 10; 
+    else if (days === '30') seconds = 3600 * 24 * 30; 
+
+    const { data, error } = await supabase.storage
+        .from('file-bucket')
+        .createSignedUrl(`users/${userId}/${originalname}/${filename_unique}`, seconds);
+
+    if (error) {
+        console.error(error);
+        return res.status(500).send("Error generating URL");
+    }
+    res.send(data.signedUrl);
+};
