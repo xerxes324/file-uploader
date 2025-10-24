@@ -4,155 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-
-    <style>
-        .sidebar{
-            min-height: 100vh;
-            background-color: rgb(60, 53, 53);
-            display: flex;
-            flex-direction: column;
-            width: 20%;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .sidebar>:first-child{
-            margin-top: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .sidebar>:nth-child(2){
-            margin-bottom: auto;
-        }
-
-        /* .sidebar>:nth-child(3){
-            margin-top: 2rem;
-            padding: 4rem;
-            flex-grow: 1;
-        } */
-
-        .hidden{
-            display: none;
-        }
-
-        .visible{
-            display: block;
-        }
-
-        .folderform,
-        .fileform {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgb(80, 63, 175);
-            padding: 3rem;
-            border: 1px solid #000;
-        }
-        img{
-            height: 30px;
-            width: 30px;
-            filter: invert(80%) sepia(40%);
-        }
-
-        .newFolderButton, .newFileButton{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-
-        button{
-            font-size: 20px !important;
-            all: unset;
-        }
-        button:hover{
-            color: rgb(31, 214, 31);
-            cursor: pointer;
-        }
-
-    </style>
-
+    <link rel="stylesheet" href="/css/sidebar.css">
 </head>
-
-
 <body>
     <div class="sidebar">
-
-        <div class="newFolderButton" >
-             <img src="/assets/folder.svg">
-            <button id="folderBtn"> new folder </button>
+        <div class="newFolderButton">
+            <img src="/assets/folder.svg" alt="Folder">
+            <button id="folderBtn">New Folder</button>
         </div>
         
         <div class="newFileButton">
-            <img src="/assets/file.svg" >
-            <button id="fileBtn"> new file </button>
+            <img src="/assets/file.svg" alt="File">
+            <button id="fileBtn">New File</button>
         </div>
-
-        <!-- <h1> Your folders: </h1> -->
-
-
-
-    </div>
-    <div>
-        <form method="post" action="/newfolder" id="folderForm" class="folderform hidden">
-            <label>Folder name:</label>
-            <input type="text" name="foldername">
-            <input name="location" class="hidden" id="getlocation">
-            <!-- <input name="queryID" class="hidden" id="getqueryID" > -->
-            <button type="submit">Create</button>
-        </form>
-    </div>
-    <div>
-        <form method="post" action="/newfile" id="fileForm" class="fileform hidden" enctype="multipart/form-data">
-            <label>File name:</label>
-            <input name="location" class="hidden" id="filelocation">
-            <input type="file" name="avatar">
-            <button type="submit">Create</button>
-        </form>
     </div>
 
-<!--  QUERY ID debug.  -->
-    
+    <form method="post" action="/newfolder" id="folderForm" class="folderform hidden">
+        <label>Folder name:</label>
+        <input type="text" name="foldername">
+        <input name="location" class="hidden" id="getlocation">
+        <button type="submit">Create</button>
+    </form>
+
+    <form method="post" action="/newfile" id="fileForm" class="fileform hidden" enctype="multipart/form-data">
+        <label>File name:</label>
+        <input name="location" class="hidden" id="filelocation">
+        <input type="file" name="avatar">
+        <button type="submit">Create</button>
+    </form>
 
     <script>
-        var folderBtn = document.getElementById("folderBtn");
-        var fileBtn = document.getElementById("fileBtn");
-        var folderForm = document.getElementById("folderForm");
-        var fileForm = document.getElementById("fileForm");
+        const folderBtn = document.getElementById("folderBtn");
+        const fileBtn = document.getElementById("fileBtn");
+        const folderForm = document.getElementById("folderForm");
+        const fileForm = document.getElementById("fileForm");
 
-        folderBtn.onclick = function() {
-            fileForm.classList.add("hidden");
+        document.getElementById("filelocation").value = window.location.pathname;
+        document.getElementById("getlocation").value = window.location.pathname;
+
+        folderBtn.onclick = function(e) {
+            e.stopPropagation();
             fileForm.classList.remove("visible");
+            fileForm.classList.add("hidden");
             folderForm.classList.toggle("hidden");
             folderForm.classList.toggle("visible");
         }
 
-        fileBtn.onclick = function() {
-            folderForm.classList.add("hidden");
+        fileBtn.onclick = function(e) {
+            e.stopPropagation();
             folderForm.classList.remove("visible");
+            folderForm.classList.add("hidden");
             fileForm.classList.toggle("hidden");
             fileForm.classList.toggle("visible");
         }
-        document.getElementById("filelocation").value = window.location.pathname;
-        document.getElementById("getlocation").value = window.location.pathname;
-
-        document.addEventListener("click",(e)=>{
-            if ( !fileForm.contains(e.target) && e.target !== fileBtn ){
-                console.log("closing form..");
-                fileForm.classList.toggle("visible");
-                fileForm.classList.toggle("hidden");
-                folderForm.classList.remove('visible');
-                folderForm.classList.add("hidden");
-            }
-        })
 
         document.addEventListener("click", (e) => {
-            if ( !folderForm.contains(e.target) && e.target !== folderBtn ){
-                folderForm.toggle("visible");
-                folderForm.toggle("hidden");
-                fileForm.classList.remove('visible');
+            if (!folderForm.contains(e.target) && e.target !== folderBtn) {
+                folderForm.classList.remove("visible");
+                folderForm.classList.add("hidden");
+            }
+            if (!fileForm.contains(e.target) && e.target !== fileBtn) {
+                fileForm.classList.remove("visible");
                 fileForm.classList.add("hidden");
+            }
+        });
+
+        document.getElementById("fileForm").addEventListener("submit", (e)=>{
+            const fileinput = document.querySelector('input[type="file"]');
+            const file = fileinput.files[0]
+            
+            if ( file.size > 5 * 1024 * 1024 ){
+                e.preventDefault();
+                alert("File size must be less than 5 MB !");
             }
         })
     </script>
