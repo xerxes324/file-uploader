@@ -4,7 +4,8 @@ const router = require("./routes/userRouter");
 const passport = require("passport");
 const session = require('express-session');
 const { PrismaSessionStore } = require("@quixo3/prisma-session-store");
-const PrismaClient = require("./generated/prisma");
+const {PrismaClient} = require("./generated/prisma");
+const prismaclient = new PrismaClient();
 
 app.set("view engine", "ejs");
 app.use(express.json());
@@ -20,7 +21,7 @@ app.use(session({
     resave : false,
     saveUninitialized : false,
     store: new PrismaSessionStore(
-        new PrismaClient(),
+        prismaclient,
         {
             checkPeriod: 2 * 60 * 1000,
             dbRecordIdIsSessionId: true,
