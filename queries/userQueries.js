@@ -25,4 +25,5 @@ exports.createUser = async(req,res,next) =>{
             password: password
         }
     })
+    next();
 }
