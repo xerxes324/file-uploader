@@ -15,9 +15,7 @@ exports.dashboard = async(req,res,next) =>{
     if ( location === "/dashboard"){
 
         const fd = await folders.getFoldersByID(req.user.id);
-        const fl = await files.getFilesByID(null);
-
-
+        const fl = await files.getFilesByID(null, req.user.id);
         if ( !fd || fd.length === 0){ //files in home dir
             res.render("dashboard", {user:req.user, folders:[], files:fl})
         }
@@ -29,7 +27,7 @@ exports.dashboard = async(req,res,next) =>{
     else{
         const parentFolderID = req.session.parentFolderID;
         const subfd = await folders.getSubfoldersByID(parseInt(parentFolderID));
-        const subfiles = await files.getFilesByID(parentFolderID);
+        const subfiles = await files.getFilesByID(parentFolderID, req.user.id);
         res.render("dashboard",{
             user: req.user, 
             folders: subfd, files: subfiles
@@ -41,26 +39,17 @@ exports.dashboard = async(req,res,next) =>{
 exports.routeLocation = async(req,res,next)=>{
 
     const fd = await folders.getFoldersByID(req.user.id);
-    const fl = await files.getFilesByID(null);
+    const fl = await files.getFilesByID(null, req.user.id);
 
     if ( res.locals.location === "/dashboard"){
-        if ( !fd || fd.length === 0){ 
-            res.render("dashboard", {user:req.user, folders:[], files:fl})
-        }
-        else{ 
-            res.render('dashboard', {user: req.user, folders :fd, files: fl})
-        }
+        res.redirect("/dashboard");
     }
 
     else{
-        const fl = await files.getFilesByID(req.session.parentFolderID);
+        const fl = await files.getFilesByID(req.session.parentFolderID, req.user.id);
         const parentFolderID = req.session.parentFolderID;
         const subfd = await folders.getSubfoldersByID(parseInt(parentFolderID));
-        res.render("dashboard",{
-            user: req.user, 
-            folders: subfd, 
-            files:fl
-        })
+        res.redirect(`/foldercontents/?id=${req.user.id}`);
     }
 
 }
