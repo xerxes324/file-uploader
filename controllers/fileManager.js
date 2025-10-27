@@ -44,7 +44,8 @@ exports.addFile = async(req,res,next) =>{
                 filename:req.file.filename,
                 path: req.file.path,
                 size:req.file.size,
-                folder_id:null
+                folder_id:null,
+                user_id:req.user.id
             }
         })
 
@@ -57,7 +58,8 @@ exports.addFile = async(req,res,next) =>{
                 filename : req.file.filename,
                 path : req.file.path,
                 size : req.file.size,
-                folder_id: req.session.parentFolderID
+                folder_id: req.session.parentFolderID,
+                user_id: req.user.id
             }
         }
 
@@ -70,10 +72,11 @@ exports.addFile = async(req,res,next) =>{
 }
 
 
-exports.getFilesByID = async(id) => {
+exports.getFilesByID = async(id, user) => {
     const files = await prisma.files.findMany({
         where:{
-            folder_id: id
+            folder_id: id,
+            user_id: user
         }
     })
     return files;
